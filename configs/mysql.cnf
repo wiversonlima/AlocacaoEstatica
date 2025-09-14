@@ -1,0 +1,118 @@
+# Configuração MySQL otimizada para tablet Android
+# Arquivo: mysql.cnf
+
+[mysql]
+# Configurações do cliente MySQL
+default-character-set = utf8mb4
+socket = /data/data/com.termux/files/usr/tmp/mysql.sock
+
+[mysqld]
+# Configurações básicas do servidor
+bind-address = 127.0.0.1
+port = 3306
+socket = /data/data/com.termux/files/usr/tmp/mysql.sock
+pid-file = /data/data/com.termux/files/usr/tmp/mysql.pid
+
+# Diretórios
+basedir = /data/data/com.termux/files/usr
+datadir = /data/data/com.termux/files/usr/var/lib/mysql
+tmpdir = /data/data/com.termux/files/usr/tmp
+
+# Logs
+log-error = /data/data/com.termux/files/usr/var/log/mysql/error.log
+slow_query_log = 1
+slow_query_log_file = /data/data/com.termux/files/usr/var/log/mysql/slow.log
+long_query_time = 2
+
+# Configurações de caracteres para WordPress
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+init-connect = 'SET NAMES utf8mb4'
+
+# Configurações de memória otimizadas para tablet (512MB-2GB RAM)
+# Ajuste conforme a RAM disponível do seu tablet
+
+# Buffer pools - usar cerca de 50% da RAM disponível para MySQL
+innodb_buffer_pool_size = 64M  # Para tablets com 1GB RAM
+# innodb_buffer_pool_size = 128M  # Para tablets com 2GB+ RAM
+
+# Configurações de cache e buffers
+key_buffer_size = 16M
+query_cache_type = 1
+query_cache_size = 16M
+query_cache_limit = 1M
+
+# Configurações de tabelas temporárias
+tmp_table_size = 16M
+max_heap_table_size = 16M
+
+# Configurações de conexão
+max_connections = 20
+max_user_connections = 15
+connect_timeout = 10
+wait_timeout = 600
+interactive_timeout = 600
+
+# Configurações de thread
+thread_cache_size = 4
+thread_stack = 192K
+
+# Configurações InnoDB otimizadas para Android
+innodb_file_per_table = 1
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 8M
+innodb_log_buffer_size = 4M
+innodb_flush_log_at_trx_commit = 2
+innodb_lock_wait_timeout = 50
+
+# Configurações de segurança
+skip-name-resolve
+local-infile = 0
+
+# Configurações de performance para SSD/eMMC
+innodb_io_capacity = 200
+innodb_read_io_threads = 2
+innodb_write_io_threads = 2
+
+# Configurações de log binário (desabilitado para economizar espaço)
+skip-log-bin
+
+# Configurações de otimização para WordPress
+# Otimizar para muitas operações SELECT
+table_open_cache = 64
+table_definition_cache = 256
+
+# Configurações de sort e join
+sort_buffer_size = 1M
+join_buffer_size = 1M
+read_buffer_size = 256K
+read_rnd_buffer_size = 512K
+
+# Configurações MyISAM (se usado)
+myisam_sort_buffer_size = 4M
+myisam_max_sort_file_size = 64M
+myisam_repair_threads = 1
+
+[mysqldump]
+# Configurações para backup
+quick
+single-transaction
+lock-tables = false
+routines
+default-character-set = utf8mb4
+
+[mysql_safe]
+# Configurações de segurança
+malloc-lib = tcmalloc
+nice = 0
+
+[isamchk]
+key_buffer_size = 8M
+sort_buffer_size = 8M
+
+[myisamchk]
+key_buffer_size = 8M
+sort_buffer_size = 8M
+
+[mysqlhotcopy]
+interactive-timeout
